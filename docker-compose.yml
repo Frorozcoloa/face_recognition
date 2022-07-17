@@ -1,0 +1,17 @@
+services:
+  face_conda:
+    image: face_recogniton:latest
+    command: python
+    volumes:
+      - .:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    ports:
+      - 5000:5000
+      - 8888:8888
+    devices:
+      - /dev/video0:/dev/video0
+      - /dev/video1:/dev/video1
+      # - /dev/video0:/dev/video0
+      #- /dev/video1/dev/video1
+    environment:
+      - DISPLAY=$DISPLAY%   
