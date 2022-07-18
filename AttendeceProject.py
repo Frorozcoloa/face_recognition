@@ -10,6 +10,7 @@ images = []
 className = []
 myList = os.listdir(path)
 
+# Leemos las imagenes de la carpeta
 for cl in myList:
     curImg = cv2.imread(f"{path}/{cl}")
     images.append(curImg)
@@ -17,7 +18,16 @@ for cl in myList:
 
 
 
-def findEncoding(images):
+def findEncoding(images:list)->list:
+    """Coge las imagenes de la base de datos y le saca el encoding
+
+    Args:
+        images (list): una lista de arays con las imagenes
+
+    Returns:
+        list: encode de las imagenes.
+    """    
+
     encodeList = []
     for img in images:
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -35,14 +45,17 @@ while True:
     imgs = cv2.resize(img, (0,0), None, 0.25, 0.25)
     imgs = cv2.cvtColor(imgs, cv2.COLOR_BGR2RGB)
 
+    # Primero reconocemos las imagenes y luego sacamos el encode
     faceCurFrame = face_recognition.face_locations(imgs)
     encodeCurFrame = face_recognition.face_encodings(imgs, faceCurFrame)
 
+    # Buscamos por cada cara cual es el menor de la lista de encodes
     for encodeFace, faceLoc in zip(encodeCurFrame, faceCurFrame):
         matches = face_recognition.compare_faces(encodeListKnow,encodeFace)
         faceDist = face_recognition.face_distance(encodeListKnow,encodeFace)
         matchIndex = np.argmin(faceDist)
 
+        #Buscamos el match y lo ponemos en pantalla
         if matches[matchIndex]:
             name = className[matchIndex].upper()
             print(name)
@@ -55,7 +68,4 @@ while True:
     cv2.imshow("webcam", img)
     cv2.waitKey(1)
 
-# imgElon = face_recognition.load_image_file("images/elon_musk.jpg")
-# imgElon = cv2.cvtColor(imgElon, cv2.COLOR_BGR2RGB)
-# imgTest = face_recognition.load_image_file("images/bill.jpg")
-# imgTest = cv2.cvtColor(imgTest, cv2.COLOR_BGR2RGB)
+
