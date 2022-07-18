@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import face_recognition
 import os
+from datetime import datetime
 
 from pyrsistent import m
 
@@ -35,6 +36,22 @@ def findEncoding(images:list)->list:
         encodeList.append(encode)
     return encodeList
 
+def markAttandace(name):
+    with open("attendece.csv","r+") as f:
+        myDataList = f.readline()
+        nameList = []
+        for line in myDataList:
+            entry = line.split(",")
+            nameList.append(entry[0])
+        if name not in nameList:
+            now = datetime.now()
+            dString = now.strftime("%H:%M:%S")
+            f.writelines(f"\n{name},{dString}")
+
+
+
+
+
 encodeListKnow = findEncoding(images)
 print("Encoding Complete")
 
@@ -58,13 +75,12 @@ while True:
         #Buscamos el match y lo ponemos en pantalla
         if matches[matchIndex]:
             name = className[matchIndex].upper()
-            print(name)
             y1,x2,y2,x1 = faceLoc
             y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
             cv2.rectangle(img,(x1,y1),(x2,y2),(0,255,0),2)
             cv2.rectangle(img,(x1,y2-35),(x2,y2),(0,255,0),cv2.FILLED)
             cv2.putText(img,name,(x1+6,y2-6),cv2.FONT_HERSHEY_COMPLEX,1,(255,255,255),2)
-    
+            markAttandace(name)
     cv2.imshow("webcam", img)
     cv2.waitKey(1)
 
