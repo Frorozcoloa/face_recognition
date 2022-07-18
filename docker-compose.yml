@@ -1,6 +1,6 @@
 services:
   face_conda:
-    image: face_recogniton:latest
+    image: face
     command: python
     volumes:
       - .:/app
