@@ -37,6 +37,7 @@ def findEncoding(images:list)->list:
     return encodeList
 
 def markAttandace(name):
+    """creating register"""
     with open("attendece.csv","r+") as f:
         myDataList = f.readline()
         nameList = []
